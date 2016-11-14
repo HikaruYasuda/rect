@@ -1,52 +1,47 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import { authActions, getAuth } from 'src/core/auth';
-import { paths } from './routes';
-import Header from './components/header';
-
+import React from 'react'
+import { connect } from 'react-redux'
+import { isAuthenticated } from '../../core/auth/selectors'
+import { signOut } from '../../core/auth'
+import { paths } from '../routes'
+import Header from '../components/header'
 
 export class App extends React.Component {
   static contextTypes = {
-    router: React.PropTypes.object.isRequired
-  };
+    router: React.PropTypes.object.isRequired,
+  }
 
   static propTypes = {
-    auth: React.PropTypes.object.isRequired,
     children: React.PropTypes.object.isRequired,
-    signOut: React.PropTypes.func.isRequired
-  };
+    signOut: React.PropTypes.func.isRequired,
+  }
 
   componentWillReceiveProps(nextProps) {
-    const { router } = this.context;
-    const { auth } = this.props;
+    const { router } = this.context
+    const { isAuthenticated } = this.props
 
-    if (auth.authenticated && !nextProps.auth.authenticated) {
-      router.replace(paths.SIGN_IN);
-    }
-    else if (!auth.authenticated && nextProps.auth.authenticated) {
-      router.replace(paths.TASKS);
+    if (isAuthenticated && !nextProps.isAuthenticated) {
+      router.replace(paths.SIGN_IN)
+    } else if (!isAuthenticated && nextProps.isAuthenticated) {
+      router.replace(paths.HOME)
     }
   }
 
   render() {
+    const { isAuthenticated, signOut, children } = this.props
     return (
       <div>
         <Header
-          authenticated={this.props.auth.authenticated}
-          signOut={this.props.signOut}
+          authenticated={ isAuthenticated }
+          onSignOut={ signOut }
         />
-
-        <main className="main">{this.props.children}</main>
+        <main className="main">{ children }</main>
       </div>
-    );
+    )
   }
 }
 
-export default connect(
-  createSelector(
-    getAuth,
-    auth => ({ auth })
-  ),
-  authActions
-)(App)
+export default connect(state => ({
+  isAuthenticated: isAuthenticated(state)
+}), dispatch => ({
+  signOut: dispatch => signOut(dispatch)
+}))(App)

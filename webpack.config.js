@@ -24,7 +24,7 @@ const PORT = 3000;
 //---------------------------------------------------------
 const loaders = {
   js: {test: /\.js$/, exclude: /node_modules/, loader: 'babel'},
-  scss: {test: /\.scss$/, loader: 'style!css!postcss!sass'}
+  stylus: {test: /\.styl$/, loader: 'style!css!postcss!stylus'}
 };
 
 
@@ -51,7 +51,7 @@ config.postcss = [
   autoprefixer({ browsers: ['last 3 versions'] })
 ];
 
-config.sassLoader = {
+config.stylusLoader = {
   outputStyle: 'compressed',
   precision: 10,
   sourceComments: false
@@ -100,7 +100,7 @@ if (ENV_DEVELOPMENT) {
   config.module = {
     loaders: [
       loaders.js,
-      loaders.scss
+      loaders.stylus
     ]
   };
 
@@ -143,7 +143,7 @@ if (ENV_PRODUCTION) {
   config.module = {
     loaders: [
       loaders.js,
-      {test: /\.scss$/, loader: ExtractTextPlugin.extract('css?-autoprefixer!postcss!sass')}
+      {test: /\.styl$/, loader: ExtractTextPlugin.extract('css?-autoprefixer!postcss!stylus')}
     ]
   };
 
@@ -177,7 +177,7 @@ if (ENV_TEST) {
   config.module = {
     loaders: [
       loaders.js,
-      loaders.scss
+      loaders.stylus
     ]
   };
 }

@@ -5,7 +5,7 @@ import { AppContainer } from 'react-hot-loader'
 import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
-import Auth from './core/auth'
+import { initialize } from './core/auth'
 import configureStore from './core/store'
 import Root from './views/root'
 import './views/styles/style.styl'
@@ -26,6 +26,6 @@ if (module.hot) {
   });
 }
 
-Auth.initialize(store.dispatch)
+initialize(store.dispatch)
   .then(() => render(Root))
   .catch(error => console.error(error)); // eslint-disable-line no-console

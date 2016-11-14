@@ -6,14 +6,16 @@ import reducer from './reducer'
  * @returns {Store}
  */
 export default (initialState = {}) => {
-  let middleware = applyMiddleware();
+  let middleware = applyMiddleware()
 
   if (process.env.NODE_ENV !== 'production') {
     // configure redux-devtools-extension
     // @see https://github.com/zalmoxisus/redux-devtools-extension
-    const devToolsExtension = window['devToolsExtension'];
+    const devToolsExtension = window['__REDUX_DEVTOOLS_EXTENSION__']
     if (typeof devToolsExtension === 'function') {
-      middleware = compose(middleware, devToolsExtension());
+      middleware = compose(middleware, devToolsExtension({
+        serializeAction: (key, value) => (typeof value === 'symbol') ? String(value) : value
+      }))
     }
   }
 

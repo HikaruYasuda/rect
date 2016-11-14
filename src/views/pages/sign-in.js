@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { authActions } from 'src/core/auth';
+import * as authActions from '../../core/auth';
 
 
 export function SignIn({signInWithGithub, signInWithGoogle, signInWithTwitter}) {
@@ -17,14 +17,13 @@ export function SignIn({signInWithGithub, signInWithGoogle, signInWithTwitter}) 
 }
 
 SignIn.propTypes = {
-  signInWithGithub: PropTypes.func.isRequired,
-  signInWithGoogle: PropTypes.func.isRequired,
-  signInWithTwitter: PropTypes.func.isRequired
+  signInWithGithub: React.PropTypes.func.isRequired,
+  signInWithGoogle: React.PropTypes.func.isRequired,
+  signInWithTwitter: React.PropTypes.func.isRequired
 };
 
-
-//=====================================
-//  CONNECT
-//-------------------------------------
-
-export default connect(null, authActions)(SignIn);
+export default connect(null, dispatch => ({
+  signInWithGithub: authActions.signInWithGithub.bind(null, dispatch),
+  signInWithGoogle: authActions.signInWithGoogle.bind(null, dispatch),
+  signInWithTwitter: authActions.signInWithTwitter.bind(null, dispatch),
+}))(SignIn)
